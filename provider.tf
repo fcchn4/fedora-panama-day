@@ -14,7 +14,7 @@ terraform {
 
 ## Config account provider
 provider "aws" {
-  region  = "us-west-2" # Oregon
+  region  = "ca-central-1" # Canada Central
   profile = "nextbrave"
 }
 
