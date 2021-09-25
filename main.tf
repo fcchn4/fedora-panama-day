@@ -1,4 +1,20 @@
 ## Create security group
+data "aws_ami" "ubuntu" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["099720109477"] # Canonical
+}
+
 module "web_server_sg" {
   source  = "terraform-aws-modules/security-group/aws//modules/http-80"
   version = "4.3.0"
@@ -17,9 +33,9 @@ module "ec2_instance" {
   version = "3.1.0"
 
   name                   = "demo-instance"
-  ami                    = "ami-0ea1d927261d4fc0c"
+  ami                    = "ami-07bee82ddd97631a4"
   instance_type          = "t2.micro"
-  key_name               = "ubuntu"
+  key_name               = "fedora-panama-key"
   monitoring             = "false"
   vpc_security_group_ids = [module.web_server_sg.security_group_id]
   subnet_id              = module.vpc.public_subnets[0]
