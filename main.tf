@@ -23,9 +23,8 @@ module "web_server_sg" {
   description = "Security group demo"
   vpc_id      = module.vpc.vpc_id
 
-  ingress_cidr_blocks = [var.vpc_cidr]
+  ingress_cidr_blocks = ["0.0.0.0/0"]
 }
-
 
 ## Create EC2 Instance and Security Group
 module "ec2_instance" {
@@ -41,7 +40,11 @@ module "ec2_instance" {
   subnet_id              = module.vpc.public_subnets[0]
 
   user_data = <<-EOT
-    yum install nginx
+#!/bin/bash
+sudo yum install -y httpd
+sudo systemctl enable httpd
+echo "<h1>Hola Panama Day</h1>" | sudo tee /usr/share/httpd/noindex/index.html
+sudo systemctl start httpd
   EOT
 
   tags = {
